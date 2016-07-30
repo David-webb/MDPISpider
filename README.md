@@ -9,7 +9,7 @@
 
 ## 功能设计：
 1. 控制表：实现对下载进程的控制（提供组装url必须的信息，各类型文章的下载进度信息）
-	* 每次从控制表获取一条记录，用来组装url，该url就是当前需要下载的页面的url
+    * 每次从控制表获取一条记录，用来组装url，该url就是当前需要下载的页面的url
 	* 控制表的创建和初始化由SubjectMenu.py完成
 2. 文章信息表，保存每篇文章的信息
 	* 从当前页面中提取出文章信息，并存入数据库
@@ -25,31 +25,31 @@
 ## 结构设计
 1. 存储
 + 控制表
-> 结构如下表：
-	+---------------------+--------------+------+-----+---------+-------+
-	| Field               | Type         | Null | Key | Default | Extra |
-	+---------------------+--------------+------+-----+---------+-------+
-	| subjectName         | varchar(100) | NO   | PRI | NULL    |       |
-	| subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
-	| totalPageNum        | int(11)      | NO   |     | NULL    |       |
-	| downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
-	| perPageNum          | int(11)      | YES  |     | 200     |       |
-	| totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
-	+---------------------+--------------+------+-----+---------+-------+
-> 说明： subjectShortNameUrl 是构建URL所需的参数
+结构如下表,其中,subjectShortNameUrl 是构建URL所需的参数
+
+      +---------------------+--------------+------+-----+---------+-------+
+      | Field               | Type         | Null | Key | Default | Extra |
+      +---------------------+--------------+------+-----+---------+-------+
+      | subjectName         | varchar(100) | NO   | PRI | NULL    |       |
+      | subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
+      | totalPageNum        | int(11)      | NO   |     | NULL    |       |
+      | downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
+      | perPageNum          | int(11)      | YES  |     | 200     |       |
+      | totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
+      +---------------------+--------------+------+-----+---------+-------+
 
 + 文章信息表
 
-	+---------------------+--------------+------+-----+---------+-------+
-	| Field               | Type         | Null | Key | Default | Extra |
-	+---------------------+--------------+------+-----+---------+-------+
-	| subjectName         | varchar(100) | NO   | PRI | NULL    |       |
-	| subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
-	| totalPageNum        | int(11)      | NO   |     | NULL    |       |
-	| downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
-	| perPageNum          | int(11)      | YES  |     | 200     |       |
-	| totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
-	+---------------------+--------------+------+-----+---------+-------+
+      +---------------------+--------------+------+-----+---------+-------+
+      | Field               | Type         | Null | Key | Default | Extra |
+      +---------------------+--------------+------+-----+---------+-------+
+      | subjectName         | varchar(100) | NO   | PRI | NULL    |       |
+      | subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
+      | totalPageNum        | int(11)      | NO   |     | NULL    |       |
+      | downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
+      | perPageNum          | int(11)      | YES  |     | 200     |       |
+      | totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
+      +---------------------+--------------+------+-----+---------+-------+
 
 ## 程序流程
 1. SubjectMenu.py 实现控制表的创建和初始化
