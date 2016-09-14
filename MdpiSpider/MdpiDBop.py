@@ -89,6 +89,32 @@ class MdpiMysql():
         pass
 
 
+class daliyUpdateDbOps():
+    def __init__(self, SourcePath, User, Password, databaseName):
+        self.db = MySQLdb.connect(SourcePath, User, Password, databaseName, charset='utf8')
+        self.cursor = self.db.cursor()
+        pass
+
+    def UpdateMenu(self, menuInfoList):
+
+            try:
+                for i in menuInfoList:
+                    sql = 'Update downloadControl set totalPageNum=' + str(i[2]) + ' ' \
+                          + 'subjectShortNameUrl=' + i[1] + ' ' \
+                          + 'downloadedPageNum = downloadedPageNum-1' + ' '\
+                          + 'totalArticlesNum =' + str(i[5]) + ' ' \
+                          + 'where subjectName="' + i[0] + '"'
+                    # print 'update sql:',sql
+                    self.cursor.execute(sql)
+                    self.db.commit()
+                return True
+            except Exception as e:
+                print e
+                print traceback.format_exc()
+                print '更新下载记录失败！停止下载，进行检查！'
+                self.db.rollback()
+                return False
+
 if __name__ == '__main__':
     td = MdpiMysql("localhost", "root", "", "MDPIArticleInfo")
     td.CreateTable('ArticlesInfo')

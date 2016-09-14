@@ -7,8 +7,9 @@ import socket
 import json
 
 class goDownload():
-    def __init__(self, SourcePath, User, Password, databaseName):
+    def __init__(self, SourcePath, User, Password, databaseName, updateFlag=False):
         self.dboperator = MdpiMysql(SourcePath, User, Password, databaseName)
+        self.updateFlag = updateFlag
 
     # 根据提供的控制信息（页码）组装URL
     def getUrl(self, subjectShortUrlName, pageNum):
@@ -141,7 +142,7 @@ class goDownload():
         return [i.strip() for i in strtmp.split(';')]
         pass
 
-    def parseTime(self,sel):
+    def parseTime(self, sel):
         timeList = []
         tmpstr = sel.xpath('descendant::div[@class="pubdates"]/text()').extract()
         strList = tmpstr[0].split('/')
@@ -167,7 +168,11 @@ class goDownload():
             if conInfo[3] > 0:      # downloadedPageNum 初始化是-1
                 pageNum = conInfo[3] + 1
             # print 'pageNum', `pageNum`, str(pageNum)
-            dUrl = self.getUrl(conInfo[1], pageNum)
+            # 说明:由于MDPI网站的时间排序是将最新的文章放在最前面,所以,在构造url的时候,每次下载的页码要计算一下
+            if self.updateFlag == True:
+                dUrl = self.getUrl(conInfo[1], conInfo[2]-conInfo[3])
+            else:
+                dUrl = self.getUrl(conInfo[1], pageNum)
             if(self.getItem(dUrl, conInfo, pageNum)==False):
                 break
         pass
