@@ -9,13 +9,13 @@ from MdpiPapers.spiders.SubjectMenu import SubjectmenuSpider
 from MdpiPapers.LetsDownload import goDownload
 
 
-def testContinue():
-    td = MdpiMysql("localhost", "root", "tw2016941017", "MDPIArticleInfo")
+def testContinue(SourcePath, User, Password, databaseName):
+    td = MdpiMysql(SourcePath, User, Password, databaseName)
     return td.getControlInfo()
     pass
 
 
-def Inspector():
+def Inspector(SourcePath, User, Password, databaseName):
     """监控函数: 负责停止后重启"""
     count = 0
     while(testContinue()):
@@ -28,7 +28,7 @@ def GoUpdate(SourcePath, User, Password, databaseName):
     """ 用于重启爬虫更新数据库数据 """
     # 工具准备
     sp = SubjectmenuSpider()
-    gd = goDownload(SourcePath, User, Password, databaseName,updateFlag=True)
+    gd = goDownload(SourcePath, User, Password, databaseName, updateFlag=True)
     dbOp = daliyUpdateDbOps(SourcePath, User, Password, databaseName)
     murl = 'http://www.mdpi.com/'
     response = requests.get(murl)
@@ -48,13 +48,18 @@ def GoUpdate(SourcePath, User, Password, databaseName):
 
 
 if __name__ == '__main__':
+    # SourcePath = "localhost"
+    # databaseName = "MDPIArticleInfo"
+    # userName = raw_input("数据库用户名:")
+    # import getpass
+    # psw = getpass.getpass("密码:")
     # 测试脚本运行: 失败(import 的路径有问题) !!!!!!
     # if len(sys.argv) < 2:
     #     print "忘记输入参数了(goupdate/inspector),请重启!"
     # elif sys.argv[1].lower() == 'goupdate':
-    #     GoUpdate()
+    #     GoUpdate(SourcePath, User, Password, databaseName)
     # elif sys.argv[1].lower() == 'inspector':
-    #     Inspector()
+    #     Inspector(SourcePath, User, Password, databaseName)
 
-    GoUpdate("localhost", "root", "tw2016941017", "MDPIArticleInfo")
+    GoUpdate("localhost", userName, psw, "MDPIArticleInfo")
     pass
