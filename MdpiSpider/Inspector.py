@@ -28,7 +28,7 @@ def GoUpdate(SourcePath, User, Password, databaseName):
     """ 用于重启爬虫更新数据库数据 """
     # 工具准备
     sp = SubjectmenuSpider()
-    gd = goDownload(SourcePath, User, Password, databaseName)
+    gd = goDownload(SourcePath, User, Password, databaseName,updateFlag=True)
     dbOp = daliyUpdateDbOps(SourcePath, User, Password, databaseName)
     murl = 'http://www.mdpi.com/'
     response = requests.get(murl)
