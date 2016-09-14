@@ -25,31 +25,31 @@
 ## 结构设计
 1. 存储
 + 控制表
-> 结构如下表：
-+---------------------+--------------+------+-----+---------+-------+
-| Field               | Type         | Null | Key | Default | Extra |
-+---------------------+--------------+------+-----+---------+-------+
-| subjectName         | varchar(100) | NO   | PRI | NULL    |       |
-| subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
-| totalPageNum        | int(11)      | NO   |     | NULL    |       |
-| downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
-| perPageNum          | int(11)      | YES  |     | 200     |       |
-| totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
-+---------------------+--------------+------+-----+---------+-------+
-说明： subjectShortNameUrl 是构建URL所需的参数
+结构如下表,其中,subjectShortNameUrl 是构建URL所需的参数
+
+            +---------------------+--------------+------+-----+---------+-------+
+            | Field               | Type         | Null | Key | Default | Extra |
+            +---------------------+--------------+------+-----+---------+-------+
+            | subjectName         | varchar(100) | NO   | PRI | NULL    |       |
+            | subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
+            | totalPageNum        | int(11)      | NO   |     | NULL    |       |
+            | downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
+            | perPageNum          | int(11)      | YES  |     | 200     |       |
+            | totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
+            +---------------------+--------------+------+-----+---------+-------+
 
 + 文章信息表
->
-+---------------------+--------------+------+-----+---------+-------+
-| Field               | Type         | Null | Key | Default | Extra |
-+---------------------+--------------+------+-----+---------+-------+
-| subjectName         | varchar(100) | NO   | PRI | NULL    |       |
-| subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
-| totalPageNum        | int(11)      | NO   |     | NULL    |       |
-| downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
-| perPageNum          | int(11)      | YES  |     | 200     |       |
-| totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
-+---------------------+--------------+------+-----+---------+-------+
+
+            +---------------------+--------------+------+-----+---------+-------+
+            | Field               | Type         | Null | Key | Default | Extra |
+            +---------------------+--------------+------+-----+---------+-------+
+            | subjectName         | varchar(100) | NO   | PRI | NULL    |       |
+            | subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
+            | totalPageNum        | int(11)      | NO   |     | NULL    |       |
+            | downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
+            | perPageNum          | int(11)      | YES  |     | 200     |       |
+            | totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
+            +---------------------+--------------+------+-----+---------+-------+
 
 ## 程序流程
 1. SubjectMenu.py 实现控制表的创建和初始化
