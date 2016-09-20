@@ -99,14 +99,14 @@ class daliyUpdateDbOps():
 
             try:
                 for i in menuInfoList:
-                    sql = 'Update downloadControl set totalPageNum=' + str(i[2]) + ' ' \
-                          + 'subjectShortNameUrl=' + i[1] + ' ' \
-                          + 'downloadedPageNum = downloadedPageNum-1' + ' '\
+                    sql = 'Update downloadControl set totalPageNum=' + str(i[2]) + ',' \
+                          + 'subjectShortNameUrl="' + i[1] + '",' \
+                          + 'downloadedPageNum = downloadedPageNum-1' + ','\
                           + 'totalArticlesNum =' + str(i[5]) + ' ' \
                           + 'where subjectName="' + i[0] + '"'
                     # print 'update sql:',sql
                     self.cursor.execute(sql)
-                    self.db.commit()
+                self.db.commit()
                 return True
             except Exception as e:
                 print e

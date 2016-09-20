@@ -2,11 +2,12 @@
 import os
 import sys
 import requests
+import getpass
 # sys.path.append("..")
 # sys.path.append("../..")
-from MdpiPapers.MdpiDBop import *
-from MdpiPapers.spiders.SubjectMenu import SubjectmenuSpider
-from MdpiPapers.LetsDownload import goDownload
+from MdpiDBop import *
+from SubjectMenu import SubjectmenuSpider
+from LetsDownload import goDownload
 
 
 def testContinue(SourcePath, User, Password, databaseName):
@@ -24,7 +25,7 @@ def Inspector(SourcePath, User, Password, databaseName):
         count += 1
 
 
-def GoUpdate(SourcePath, User, Password, databaseName):
+def GoUpdate(SourcePath, User, Password, databaseName, operations=[1, 2]):
     """ 用于重启爬虫更新数据库数据 """
     # 工具准备
     sp = SubjectmenuSpider()
@@ -33,25 +34,30 @@ def GoUpdate(SourcePath, User, Password, databaseName):
     murl = 'http://www.mdpi.com/'
     response = requests.get(murl)
 
-    # 获取新的控制表的信息
-    anslist = sp.multiUseOfParse(response)
-    print anslist
+    # 更新控制表
+    if 1 in operations:
+        # 获取新的控制表的信息
+        anslist = sp.multiUseOfParse(response)
+        print anslist
 
-    # 更新控制表中总页数, 已下载页数-1, 文章总数的数据
-    if dbOp.UpdateMenu(anslist) == False:
-        print '更新menu失败'
-        return False
+        # 更新控制表中总页数, 已下载页数-1, 文章总数的数据
+        if dbOp.UpdateMenu(anslist) == False:
+            print '更新menu失败'
+            return False
 
     # 启动爬虫,下载新数据
-    gd.startDownload()
+    if 2 in operations:
+        print "启动！"
+        gd.startDownload()
     pass
 
 
 if __name__ == '__main__':
     # SourcePath = "localhost"
     # databaseName = "MDPIArticleInfo"
+    userName = 'root'
+    psw = ''
     # userName = raw_input("数据库用户名:")
-    # import getpass
     # psw = getpass.getpass("密码:")
     # 测试脚本运行: 失败(import 的路径有问题) !!!!!!
     # if len(sys.argv) < 2:
@@ -61,5 +67,5 @@ if __name__ == '__main__':
     # elif sys.argv[1].lower() == 'inspector':
     #     Inspector(SourcePath, User, Password, databaseName)
 
-    GoUpdate("localhost", userName, psw, "MDPIArticleInfo")
+    GoUpdate("localhost", userName, psw, "MDPIArticleInfo", [1, 2])
     pass

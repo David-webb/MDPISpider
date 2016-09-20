@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from MdpiPapers.MdpiDBop import MdpiMysql
+from MdpiDBop import MdpiMysql
 from scrapy import Selector
 import requests
 import traceback
@@ -19,7 +19,7 @@ class goDownload():
 
     # 根据request返回的网页源码提取items,并插入数据库
     def getItem(self, durl, conInfo, pageNum):
-        print "开始下载" + conInfo[0] + "项目的第" + str(pageNum) + "页......"
+        print "开始下载" + str(conInfo[0]) + "项目的第" + str(pageNum) + "页......"
         socket.setdefaulttimeout(60.0)     # 数值是浮点型
         try:
             r = requests.get(durl)

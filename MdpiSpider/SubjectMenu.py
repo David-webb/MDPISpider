@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from MdpiPapers.MdpiDBop import MdpiMysql
+from MdpiDBop import MdpiMysql
 import requests
 from scrapy import Selector
 import json
@@ -25,7 +25,7 @@ class SubjectmenuSpider(scrapy.Spider):
         anslist = []
         count = 0
         for sel in mlist:
-            print count
+            print "更新菜单第" + str(count) + "项目......"
             count += 1
             tmpdict = {}
             tmpdict['subjectName'] = sel.xpath('a/text()')[0].extract()     # subjectName
@@ -43,7 +43,7 @@ class SubjectmenuSpider(scrapy.Spider):
 
     def parse(self, response):
         anslist = self.multiUseOfParse(response)
-        print anslist
+        # print anslist
         with open('tmppage.txt', 'w') as wr:
             wr.write(json.dumps(anslist))
         pass
