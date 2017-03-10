@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # SourcePath = "localhost"
     # databaseName = "MDPIArticleInfo"
     userName = 'root'
-    psw = ''
+    psw = 'tw2016941017'
     # userName = raw_input("数据库用户名:")
     # psw = getpass.getpass("密码:")
     # 测试脚本运行: 失败(import 的路径有问题) !!!!!!

@@ -43,16 +43,20 @@
 
 + 文章信息表
 
-            +---------------------+--------------+------+-----+---------+-------+
-            | Field               | Type         | Null | Key | Default | Extra |
-            +---------------------+--------------+------+-----+---------+-------+
-            | subjectName         | varchar(100) | NO   | PRI | NULL    |       |
-            | subjectShortNameUrl | varchar(100) | NO   |     | NULL    |       |
-            | totalPageNum        | int(11)      | NO   |     | NULL    |       |
-            | downloadedPageNum   | int(11)      | YES  |     | NULL    |       |
-            | perPageNum          | int(11)      | YES  |     | 200     |       |
-            | totalArticlesNum    | int(11)      | NO   |     | NULL    |       |
-            +---------------------+--------------+------+-----+---------+-------+
+            +-------------------------+----------------+------+-----+---------+-------+
+            | Field                   | Type           | Null | Key | Default | Extra |
+            +-------------------------+----------------+------+-----+---------+-------+
+            | Dio                     | varchar(200)   | NO   | PRI | NULL    |       |
+            | mType                   | varchar(50)    | NO   |     | NULL    |       |
+            | Title                   | varchar(500)   | NO   |     | NULL    |       |
+            | Journal                 | varchar(100)   | NO   |     | NULL    |       |
+            | Received                | varchar(50)    | YES  |     | NULL    |       |
+            | Revised                 | varchar(50)    | YES  |     | NULL    |       |
+            | Accepted                | varchar(50)    | YES  |     | NULL    |       |
+            | Published               | varchar(50)    | YES  |     | NULL    |       |
+            | Author_Addr_Institution | varchar(20000) | YES  |     | NULL    |       |
+            +-------------------------+----------------+------+-----+---------+-------+
+
 
 ## 程序流程
 1. SubjectMenu.py 实现控制表的创建，初始化以及更新操作

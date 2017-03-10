@@ -181,3 +181,4 @@ class goDownload():
 if __name__ == '__main__':
     tmp = goDownload("localhost", "root", "", "MDPIArticleInfo")
     tmp.startDownload()
+
