@@ -6,6 +6,12 @@ import datetime
 
 
 class MdpiMysql():
+    """
+        功能: 提供MDPI爬虫程序操作mysql数据库的支持
+        函数列表:
+            CreateTable
+
+    """
     def __init__(self, SourcePath, User, Password, databaseName):
         self.db = MySQLdb.connect(SourcePath, User, Password, databaseName, charset='utf8')
         self.cursor = self.db.cursor()
@@ -39,6 +45,7 @@ class MdpiMysql():
         # settings_table
 
         pass
+
     def InsertUrls(self, urlList, TableName):
         sql = ''
         if TableName == 'downloadControl':
@@ -56,8 +63,32 @@ class MdpiMysql():
             self.db.rollback()
         pass
 
+    def getsubjectShortNameUrlList(self):
+        """ 获取控制表'subjectShortNameUrl'字段值列表 """
+        sql = "select * from downloadControl;"
+        try:
+            self.cursor.execute(sql)
+            return list(self.cursor.fetchall())
+        except Exception as e:
+            print "读取控制表subjectShortNameUrl列表失败......"
+            print traceback.format_exc()
+            return False
+        pass
+
+    def updateCtrlTable(self, shortname, datalist):
+        """ 更新控制列表, totalArticlesNum, totalPageNum 这两个字段 """
+        sql = "update downloadControl set totalArticlesNum = %d, totalPageNum = %d where subjectShortNameUrl= '%s'" % (datalist[0], datalist[1], shortname)
+        try:
+            self.cursor.execute(sql)
+            self.db.commit()
+        except Exception as e:
+            print e
+            print traceback.format_exc()
+            self.db.rollback()
+        pass
 
     def getControlInfo(self):
+        """ 从控制列表获取未下载完的record """
         sql = "select * from  downloadControl where downloadedPageNum < totalPageNum limit 1 FOR UPDATE"
         try:
             self.cursor.execute(sql)
@@ -116,7 +147,9 @@ class daliyUpdateDbOps():
                 return False
 
 if __name__ == '__main__':
-    td = MdpiMysql("localhost", "root", "", "MDPIArticleInfo")
-    td.CreateTable('ArticlesInfo')
+    td = MdpiMysql("localhost", "root", "tw2016941017", "MDPIArticleInfo")
+    # td.CreateTable('ArticlesInfo')
+    # tmplsit = td.getsubjectShortNameUrlList()
+    # td.updateCtrlTable("bio-life", [21590, 108])
 
     pass

@@ -3,6 +3,7 @@ import os
 import sys
 import requests
 import getpass
+import time
 # sys.path.append("..")
 # sys.path.append("../..")
 from MdpiDBop import *
@@ -19,8 +20,9 @@ def testContinue(SourcePath, User, Password, databaseName):
 def Inspector(SourcePath, User, Password, databaseName):
     """监控函数: 负责停止后重启"""
     count = 0
-    while(testContinue()):
+    while(testContinue(SourcePath, User, Password, databaseName)):
         os.system('python LetsDownload.py')
+        time.sleep(30)
         print '\n第' + `count` + '次启动...'
         count += 1
 
@@ -28,16 +30,15 @@ def Inspector(SourcePath, User, Password, databaseName):
 def GoUpdate(SourcePath, User, Password, databaseName, operations=[1, 2]):
     """ 用于重启爬虫更新数据库数据 """
     # 工具准备
-    sp = SubjectmenuSpider()
+    sp = SubjectmenuSpider(SourcePath, User, Password, databaseName)
     gd = goDownload(SourcePath, User, Password, databaseName, updateFlag=True)
     dbOp = daliyUpdateDbOps(SourcePath, User, Password, databaseName)
     murl = 'http://www.mdpi.com/'
-    response = requests.get(murl)
 
     # 更新控制表
     if 1 in operations:
         # 获取新的控制表的信息
-        anslist = sp.multiUseOfParse(response)
+        anslist = sp.multiUseOfParse()
         print anslist
 
         # 更新控制表中总页数, 已下载页数-1, 文章总数的数据
@@ -53,7 +54,7 @@ def GoUpdate(SourcePath, User, Password, databaseName, operations=[1, 2]):
 
 
 if __name__ == '__main__':
-    # SourcePath = "localhost"
+    Host = "59.110.157.231"
     # databaseName = "MDPIArticleInfo"
     userName = 'root'
     psw = 'tw2016941017'
@@ -67,5 +68,6 @@ if __name__ == '__main__':
     # elif sys.argv[1].lower() == 'inspector':
     #     Inspector(SourcePath, User, Password, databaseName)
 
-    GoUpdate("localhost", userName, psw, "MDPIArticleInfo", [1, 2])
+    # GoUpdate(Host, userName, psw, "MDPIArticleInfo", [2])
+    Inspector(Host, userName, psw, "MDPIArticleInfo")
     pass

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from MdpiDBop import MdpiMysql
 from scrapy import Selector
+from requests.exceptions import ContentDecodingError
 import requests
 import traceback
 import socket
@@ -10,6 +11,23 @@ class goDownload():
     def __init__(self, SourcePath, User, Password, databaseName, updateFlag=False):
         self.dboperator = MdpiMysql(SourcePath, User, Password, databaseName)
         self.updateFlag = updateFlag
+        self.parseRules = {
+            "ArticlesInfoList": '//form[@id="exportArticles"]//div[@class="generic-item article-item"]',
+            "JournalAndDoi": 'descendant::div[@class="idnt"]/child::node()',
+            "title": 'descendant::div[@class="article-content"]/a[1]/text()',
+            "time": 'descendant::div[@class="pubdates"]/text()',
+            "author": 'descendant::div[@class="authors"]/span[@class="inlineblock"]',
+            "Affliations": 'descendant::div[@class="affiliations"]/text()',
+        }
+        self.headers = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            # "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Connection": "keep-alive",
+            # "Cookie": "device_view=full; _ga=GA1.2.251186890.1488089354; mdpi_cookies_enabled=1; mdpi_active_subject_name_system=bio-life; mdpi_active_subject_name_full=Biology+%26+Life+Sciences",
+            "Host":	"www.mdpi.com",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36",
+        }
 
     # 根据提供的控制信息（页码）组装URL
     def getUrl(self, subjectShortUrlName, pageNum):
@@ -22,11 +40,13 @@ class goDownload():
         print "开始下载" + str(conInfo[0]) + "项目的第" + str(pageNum) + "页......"
         socket.setdefaulttimeout(60.0)     # 数值是浮点型
         try:
+            # r = requests.get(durl, headers=self.headers)
             r = requests.get(durl)
-            # with open('tmppage.txt', 'r')as rd:
+            # with open('tmppage1.txt', 'r')as rd:
             #     slect = Selector(text=rd.read())
             slect = Selector(text=r.text)
-            articleItemLists = slect.xpath('//table[@class="articleItem"]')
+            # articleItemLists = slect.xpath('//table[@class="articleItem"]')
+            articleItemLists = slect.xpath('//form[@id="exportArticles"]//div[@class="generic-item article-item"]')
             totalArtInfoLists = []
             for sel in articleItemLists:
                 ArtInfo = {}
@@ -34,7 +54,7 @@ class goDownload():
                 ArtInfo['Dio'] = JandDList[1]
                 ArtInfo['mType'] = conInfo[0]
                 try:
-                    ArtInfo['title'] = sel.xpath('descendant::div[@class="title"]/a/text()')[0].extract()
+                    ArtInfo['title'] = sel.xpath('descendant::div[@class="article-content"]/a[1]/text()')[0].extract()
                 except:
                     # print sel.xpath('descendant::div[@class="title"]/a/text()').extract()
                     ArtInfo['title'] = '"the title is Not Given!"'
@@ -47,14 +67,16 @@ class goDownload():
                 ArtInfo['Author_Addr_Institution'] = self.parseAffiliatioln(sel)
                 totalArtInfoLists.append([ArtInfo['Dio'], ArtInfo['mType'], ArtInfo['title'], ArtInfo['Journal'], ArtInfo['Received'],
                                           ArtInfo['Revised'], ArtInfo['Accepted'], ArtInfo['Published'], ArtInfo['Author_Addr_Institution']])
-                # print ArtInfo
-                # break
-            print len(totalArtInfoLists)
+            # print len(totalArtInfoLists)
             # import pprint
             # pprint.pprint(totalArtInfoLists[0])
             self.dboperator.InsertUrls(totalArtInfoLists, 'ArticlesInfo')
             self.dboperator.UpdatedownloadRcd(conInfo[0], pageNum)
             return True
+        except ContentDecodingError:
+            print "解析出错..., 重新获取......"
+            return True
+            pass
         except Exception as e:
             print e
             print traceback.format_exc()
@@ -100,7 +122,7 @@ class goDownload():
                         supNum = supNum[0]
                         for j in [int(t) for t in supNum.strip().split(',') if self.judgeNumStr(t)]:
                             try:
-                                AuthorToAffiliationDict[affiliationlist[j-1]].append(name)
+                                AuthorToAffiliationDict[affiliationlist[j-1]].append(name[0])
                             except:
                                 # print 'index: ', j, 'affiliation[0]:',affiliationlist[0]
                                 # AuthorToAffiliationDict[affiliationlist[j-2]].append(name)  # 有些论文格式不规范：上标的数字最大值超过实际的单位个数
@@ -125,7 +147,7 @@ class goDownload():
 
 
     def parseJournalAndDoi(self, sel):
-        childList = sel.xpath('descendant::div[@class="idnt"]/child::node()')
+        childList = sel.xpath('descendant::div[@class="idnt"][1]/child::node()')
         strtmp = ''
         count = 0
         for i in childList:
@@ -134,6 +156,7 @@ class goDownload():
             else:
                 strtmp += i.xpath('text()').extract()[0]
             count += 1
+
         # tmplist = [i.xpath('text()').extract()[0] for i in childList[::2]]
         # tmplist2 = [j.extract() for j in childList[1::2]]
         # for i, j in tmplist, tmplist2:
@@ -179,6 +202,6 @@ class goDownload():
 
 
 if __name__ == '__main__':
-    tmp = goDownload("localhost", "root", "", "MDPIArticleInfo")
+    tmp = goDownload("59.110.157.231", "root", "tw2016941017", "MDPIArticleInfo", updateFlag=True)
     tmp.startDownload()
 
