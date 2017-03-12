@@ -4,6 +4,7 @@ from MdpiDBop import MdpiMysql
 import requests
 from scrapy import Selector
 import json
+import time
 # from MdpiPapers.items import subjectItem
 
 
@@ -63,6 +64,7 @@ class SubjectmenuSpider(scrapy.Spider):
             item[2] = totalPageNum
             anslist.append(item)
             print "提取%s主页信息成功......" % item[0]
+            time.sleep(5)
         return anslist
 
     def multiUseOfParse_old(self, response):
@@ -119,7 +121,7 @@ if __name__ == "__main__":
 
 
     # *********************更新下载列表**************************************
-    tmpobj = SubjectmenuSpider("localhost", "root", "tw2016941017", "MDPIArticleInfo")
+    tmpobj = SubjectmenuSpider("localhost", "root", "", "MDPIArticleInfo")
     ## --------测试获取文章总数函-------------
     with open('tmppage1.txt', 'r') as rd:
         tmptext = rd.read()

@@ -202,6 +202,6 @@ class goDownload():
 
 
 if __name__ == '__main__':
-    tmp = goDownload("59.110.157.231", "root", "tw2016941017", "MDPIArticleInfo", updateFlag=True)
+    tmp = goDownload("", "root", "", "MDPIArticleInfo", updateFlag=False)
     tmp.startDownload()
 

@@ -54,10 +54,10 @@ def GoUpdate(SourcePath, User, Password, databaseName, operations=[1, 2]):
 
 
 if __name__ == '__main__':
-    Host = "59.110.157.231"
+    Host = ""
     # databaseName = "MDPIArticleInfo"
     userName = 'root'
-    psw = 'tw2016941017'
+    psw = ''
     # userName = raw_input("数据库用户名:")
     # psw = getpass.getpass("密码:")
     # 测试脚本运行: 失败(import 的路径有问题) !!!!!!
@@ -68,6 +68,6 @@ if __name__ == '__main__':
     # elif sys.argv[1].lower() == 'inspector':
     #     Inspector(SourcePath, User, Password, databaseName)
 
-    # GoUpdate(Host, userName, psw, "MDPIArticleInfo", [2])
-    Inspector(Host, userName, psw, "MDPIArticleInfo")
+    GoUpdate(Host, userName, psw, "MDPIArticleInfo", [1])
+    # Inspector(Host, userName, psw, "MDPIArticleInfo")
     pass

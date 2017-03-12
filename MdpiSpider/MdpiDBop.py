@@ -147,7 +147,7 @@ class daliyUpdateDbOps():
                 return False
 
 if __name__ == '__main__':
-    td = MdpiMysql("localhost", "root", "tw2016941017", "MDPIArticleInfo")
+    td = MdpiMysql("localhost", "root", "", "MDPIArticleInfo")
     # td.CreateTable('ArticlesInfo')
     # tmplsit = td.getsubjectShortNameUrlList()
     # td.updateCtrlTable("bio-life", [21590, 108])
